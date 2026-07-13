@@ -1,0 +1,141 @@
+
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# =============================================================
+# DEPENDENCIES
+# =============================================================
+node_modules/
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+bun.lock
+bun.lockb
+
+# =============================================================
+# BUILD OUTPUT
+# =============================================================
+/.next/
+/out/
+/build
+/dist-electron/
+/dist-app/
+backend/dist/
+
+# =============================================================
+# ENVIRONMENT & SECRETS  (never commit real credentials)
+# =============================================================
+.env.local
+.env.*.local
+backend/.env
+supabase/.env
+# Keep example/template files so others can onboard
+!.env.local.template
+!backend/.env.example
+
+# =============================================================
+# SUPABASE LOCAL DEV (cloud project files are tracked)
+# =============================================================
+supabase/.temp/
+supabase/.branches/
+
+# =============================================================
+# SQL FILES  (keep schema + migrations, ignore everything else)
+# =============================================================
+*.sql
+!supabase/schema.sql
+!supabase/seed.sql
+!supabase/seed-roles.sql
+!supabase/escrows.sql
+!supabase/migrations/*.sql
+
+# =============================================================
+# GO
+# =============================================================
+escrow-service/vendor/
+escrow-service/*.exe
+escrow-service/*.test
+
+# =============================================================
+# TYPESCRIPT
+# =============================================================
+*.tsbuildinfo
+next-env.d.ts
+
+# =============================================================
+# TESTING & COVERAGE
+# =============================================================
+/coverage
+test-results/
+playwright-report/
+.playwright-mcp/
+*.test.json
+
+# =============================================================
+# LOGS
+# =============================================================
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+scripts/*.log
+scripts/*.output
+
+# =============================================================
+# OS & EDITOR
+# =============================================================
+.DS_Store
+Thumbs.db
+ehthumbs.db
+*.pem
+*.swp
+*.swo
+.idea/
+*.sublime-*
+.vscode/
+*.cursor
+
+# =============================================================
+# TEMPORARY & MISC
+# =============================================================
+*.tmp
+*.temp
+*.cache
+*.auto
+*.bak
+*.bak*
+*.backup
+*.backup*
+tmpclaude-*
+
+# =============================================================
+# LOCAL-ONLY DOCS & ARTIFACTS
+# =============================================================
+/instructions/
+/data/
+README/local-debug/
+PERFORMANCE_REPORT.md
+TESTING.md
+LINT_*.md
+*_STATUS.md
+*_WARNINGS.txt
+phase*.md
+*CHAT.md
+*chat.md
+docs/phase*.md
+docs/*-status.md
+docs/testing/*.png
+performance-test.js
+
+# =============================================================
+# TOOLING (local only)
+# =============================================================
+.vercel
+.mcp.json
+.claude/
+.claude.json
+.codacy/

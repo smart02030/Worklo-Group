@@ -1,0 +1,316 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   Worklo DESIGN SYSTEM — Dark Premium Theme
+   Primary: Deep dark backgrounds, teal accent, crisp whites
+   ============================================================ */
+
+:root {
+  --radius: 0.75rem;
+
+  /* Worklo Brand Palette */
+  --Worklo-black: #080b0f;
+  --Worklo-dark: #0d1117;
+  --Worklo-surface: #111827;
+  --Worklo-elevated: #161d2b;
+  --Worklo-border: rgba(255, 255, 255, 0.08);
+  --Worklo-border-strong: rgba(255, 255, 255, 0.14);
+
+  /* Teal accent — Worklo's signature color */
+  --Worklo-teal: #00c2a8;
+  --Worklo-teal-dim: rgba(0, 194, 168, 0.15);
+  --Worklo-teal-glow: rgba(0, 194, 168, 0.25);
+
+  /* Text hierarchy */
+  --Worklo-text-primary: #f0f4f8;
+  --Worklo-text-secondary: #8b9bb4;
+  --Worklo-text-muted: #4a5568;
+
+  /* -- Core tokens -- */
+  --background: #080b0f;
+  --foreground: #f0f4f8;
+
+  --card: #111827;
+  --card-foreground: #f0f4f8;
+
+  --popover: #161d2b;
+  --popover-foreground: #f0f4f8;
+
+  --primary: #00c2a8;
+  --primary-foreground: #080b0f;
+
+  --secondary: #161d2b;
+  --secondary-foreground: #8b9bb4;
+
+  --muted: #161d2b;
+  --muted-foreground: #8b9bb4;
+
+  --accent: #1a2235;
+  --accent-foreground: #f0f4f8;
+
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+
+  --border: rgba(255, 255, 255, 0.08);
+  --input: rgba(255, 255, 255, 0.06);
+  --ring: #00c2a8;
+
+  /* Surface scale (for consistent layering) */
+  --surface-0: var(--background); /* app background */
+  --surface-1: #0b1017;           /* subtle raised */
+  --surface-2: var(--card);       /* cards/sections */
+  --surface-3: var(--popover);    /* popovers/dialogs */
+
+  /* Shadows (subtle, dark-mode friendly) */
+  --shadow-sm: 0 1px 0 rgba(255, 255, 255, 0.04), 0 10px 24px rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 1px 0 rgba(255, 255, 255, 0.05), 0 16px 40px rgba(0, 0, 0, 0.35);
+
+  /* Chart colors */
+  --chart-1: #00c2a8;
+  --chart-2: #3b82f6;
+  --chart-3: #8b5cf6;
+  --chart-4: #f59e0b;
+  --chart-5: #ef4444;
+  --chart-6: #10b981;
+  --chart-7: #6366f1;
+  --chart-8: #ec4899;
+
+  /* Sidebar */
+  --sidebar: #0d1117;
+  --sidebar-bg: #0d1117;
+  --sidebar-foreground: #f0f4f8;
+  --sidebar-border: rgba(255, 255, 255, 0.07);
+  --sidebar-text: #8b9bb4;
+  --sidebar-text-muted: #4a5568;
+  --sidebar-text-active: #f0f4f8;
+  --sidebar-section-header: #4a5568;
+  --sidebar-active-bg: rgba(0, 194, 168, 0.1);
+  --sidebar-active-border: #00c2a8;
+  --sidebar-hover-bg: rgba(255, 255, 255, 0.04);
+  --sidebar-profile-bg: rgba(255, 255, 255, 0.04);
+  --sidebar-primary: #00c2a8;
+  --sidebar-primary-foreground: #080b0f;
+  --sidebar-accent: rgba(0, 194, 168, 0.1);
+  --sidebar-accent-foreground: #f0f4f8;
+  --sidebar-ring: #00c2a8;
+
+  /* Status colors */
+  --status-success: #10b981;
+  --status-success-bg: rgba(16, 185, 129, 0.1);
+  --status-warning: #f59e0b;
+  --status-warning-bg: rgba(245, 158, 11, 0.1);
+  --status-error: #ef4444;
+  --status-error-bg: rgba(239, 68, 68, 0.1);
+  --status-info: #3b82f6;
+  --status-info-bg: rgba(59, 130, 246, 0.1);
+
+  /* Typography Scale */
+  --text-2xs: 0.625rem;
+  --text-xs: 0.6875rem;
+  --text-sm: 0.75rem;
+  --text-base: 0.875rem;
+  --text-md: 0.9375rem;
+  --text-lg: 1rem;
+  --text-xl: 1.125rem;
+  --text-2xl: 1.25rem;
+  --text-3xl: 1.5rem;
+}
+
+/* Dark mode — same as root since we're dark-first */
+.dark {
+  --background: #080b0f;
+  --foreground: #f0f4f8;
+  --card: #111827;
+  --card-foreground: #f0f4f8;
+  --popover: #161d2b;
+  --popover-foreground: #f0f4f8;
+  --primary: #00c2a8;
+  --primary-foreground: #080b0f;
+  --secondary: #161d2b;
+  --secondary-foreground: #8b9bb4;
+  --muted: #161d2b;
+  --muted-foreground: #8b9bb4;
+  --accent: #1a2235;
+  --accent-foreground: #f0f4f8;
+  --destructive: #ef4444;
+  --border: rgba(255, 255, 255, 0.08);
+  --input: rgba(255, 255, 255, 0.06);
+  --ring: #00c2a8;
+  --chart-1: #00c2a8;
+  --chart-2: #3b82f6;
+  --chart-3: #8b5cf6;
+  --chart-4: #f59e0b;
+  --chart-5: #ef4444;
+  --chart-6: #10b981;
+  --chart-7: #6366f1;
+  --chart-8: #ec4899;
+  --sidebar: #0d1117;
+  --sidebar-foreground: #f0f4f8;
+  --sidebar-primary: #00c2a8;
+  --sidebar-primary-foreground: #080b0f;
+  --sidebar-accent: rgba(0, 194, 168, 0.1);
+  --sidebar-accent-foreground: #f0f4f8;
+  --sidebar-border: rgba(255, 255, 255, 0.07);
+  --sidebar-ring: #00c2a8;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: 'rlig' 1, 'calt' 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.18);
+  }
+
+  /* Text selection */
+  ::selection {
+    background-color: rgba(0, 194, 168, 0.3) !important;
+    color: #f0f4f8 !important;
+  }
+  ::-moz-selection {
+    background-color: rgba(0, 194, 168, 0.3) !important;
+    color: #f0f4f8 !important;
+  }
+
+  /* Primary button */
+  [data-slot='button']:not([class*='ghost']):not([class*='outline']):not([class*='secondary']):not(
+      [class*='destructive']
+    ):not([class*='link']) {
+    font-weight: 600 !important;
+    letter-spacing: 0.01em;
+  }
+}
+
+/* ============================================================
+   Minimal layout utilities (used across the app)
+   ============================================================ */
+@layer utilities {
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* -- Glass card utility -- */
+  .glass-card {
+    background: rgba(17, 24, 39, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  /* -- Teal glow effect -- */
+  .teal-glow {
+    box-shadow:
+      0 0 0 1px rgba(0, 194, 168, 0.12),
+      0 10px 30px rgba(0, 194, 168, 0.08);
+  }
+
+  /* -- Gradient text -- */
+  .gradient-text {
+    background: linear-gradient(135deg, #00c2a8 0%, #3b82f6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* -- Subtle grid background -- */
+  .grid-bg {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  /* -- Masonry Grid -- */
+  .masonry-grid {
+    display: flex;
+    margin-left: -16px;
+    width: auto;
+  }
+  .masonry-grid-column {
+    padding-left: 16px;
+    background-clip: padding-box;
+  }
+}
+
+@layer components {
+  .page-title {
+    font-size: var(--text-2xl);
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .page-subtitle {
+    margin-top: 0.25rem;
+    font-size: var(--text-sm);
+    line-height: 1.4;
+    color: var(--muted-foreground);
+  }
+
+  .section-card {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: calc(var(--radius) + 0.25rem);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .section-card-header {
+    padding: 1rem 1rem 0.75rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .section-card-body {
+    padding: 1rem;
+  }
+
+  /* -- Milestone marker colors -- */
+  .milestone-marker {
+    background-color: var(--milestone-bg) !important;
+    color: white !important;
+    border-color: var(--milestone-border) !important;
+  }
+}
+
+/* -- Recharts SVG fixes -- */
+.recharts-line-curve {
+  stroke-width: 2 !important;
+  fill: none !important;
+}
+.recharts-line path {
+  stroke-width: inherit;
+  fill: none;
+}
+svg path,
+svg line,
+svg polyline {
+  border: none !important;
+}

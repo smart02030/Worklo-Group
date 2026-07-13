@@ -1,0 +1,15 @@
+# dependencies / build output
+node_modules
+.next
+out
+build
+backend/dist
+
+# generated / caches
+coverage
+playwright-report
+test-results
+
+# lockfiles (keep stable formatting)
+package-lock.json
+

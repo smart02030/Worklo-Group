@@ -1,0 +1,70 @@
+'use client';
+
+import { AlertCircle, ArrowLeft, Home, Shield } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useRouter } from 'next/navigation';
+
+interface AccessDeniedPageProps {
+  title?: string;
+  description?: string;
+  requiredPermission?: string;
+  showBackButton?: boolean;
+  showHomeButton?: boolean;
+}
+
+export function AccessDeniedPage({
+  title = 'Access Denied',
+  description = "You don't have permission to access this page.",
+  requiredPermission,
+  showBackButton = true,
+  showHomeButton = true,
+}: AccessDeniedPageProps) {
+  const router = useRouter();
+
+  return (
+    <div className="flex min-h-[80vh] items-center justify-center p-4">
+      <Card className="w-full max-w-md">
+        <CardHeader className="text-center">
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-red-100">
+            <Shield className="h-8 w-8 text-red-600" />
+          </div>
+          <CardTitle className="text-foreground text-2xl font-bold">{title}</CardTitle>
+          <CardDescription className="text-muted-foreground">{description}</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {requiredPermission && (
+            <div className="rounded-lg border border-amber-200 bg-amber-500/10 p-3">
+              <div className="flex items-start gap-2">
+                <AlertCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-amber-600" />
+                <div>
+                  <p className="text-sm font-medium text-amber-800">Required Permission</p>
+                  <p className="font-mono text-sm text-amber-700">{requiredPermission}</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className="flex flex-col gap-2 pt-2">
+            {showHomeButton && (
+              <Button onClick={() => router.push('/dashboard')} className="w-full">
+                <Home className="mr-2 h-4 w-4" />
+                Go to Dashboard
+              </Button>
+            )}
+            {showBackButton && (
+              <Button variant="outline" onClick={() => router.back()} className="w-full">
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Go Back
+              </Button>
+            )}
+          </div>
+
+          <p className="text-muted-foreground pt-2 text-center text-xs">
+            If you believe this is an error, please contact your administrator.
+          </p>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
