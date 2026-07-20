@@ -11,7 +11,7 @@ If you have any questions, feel free to reach out.
 Scoped for 2–3 hours. If you hit that limit, submit what you have and note what you'd finish next in your README.            
    
 **Focus:** Part 1 (Go escrow service) is the core evaluation. Part 2 (Next.js wiring) has stubs already in the repo — complete them after the service works.     
-     
+         
 ## Getting Started     
 
 You'll need **Node.js 20.9+**, **Go 1.22+**, and a free [Supabase](https://supabase.com) project.
