@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
+import { ProjectEscrow } from '@/components/project-escrow';
 import { ArrowLeft, Calendar, Clock, Users, FolderOpen } from 'lucide-react';
 import { format } from 'date-fns';
 
@@ -22,6 +23,7 @@ interface Project {
   end_date: string | null;
   estimated_hours: number | null;
   actual_hours: number;
+  assigned_user_id: string | null;
   account: { id: string; name: string } | null;
 }
 
@@ -185,6 +187,15 @@ export default function ProjectDetailPage() {
             </div>
           </CardContent>
         </Card>
+
+        {/* Milestone escrow */}
+        {userProfile?.id && (
+          <ProjectEscrow
+            projectId={projectId}
+            currentUserId={userProfile.id}
+            contractorId={project.assigned_user_id || ''}
+          />
+        )}
 
         {/* Tasks */}
         <Card>
