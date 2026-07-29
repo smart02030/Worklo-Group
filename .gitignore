@@ -50,6 +50,7 @@ supabase/.branches/
 !supabase/seed.sql
 !supabase/seed-roles.sql
 !supabase/escrows.sql
+!supabase/escrow-rpc.sql
 !supabase/migrations/*.sql
 
 # =============================================================
@@ -139,3 +140,6 @@ performance-test.js
 .claude/
 .claude.json
 .codacy/
+
+# npm auth token — never commit
+.npmrc

@@ -4,19 +4,18 @@ const { requireAuthAndPermission, handleGuardError } = require('@/lib/server-gua
 const { Permission } = require('@/lib/permissions');
 const { logger } = require('@/lib/debug-logger');
 const { isValidUUID } = require('@/lib/validation-helpers');
-
-const ESCROW_SERVICE_URL = process.env.GO_ESCROW_SERVICE_URL || 'http://localhost:4001';
+const {
+  callEscrowService,
+  escrowServiceErrorResponse,
+  unavailableResponse,
+  EscrowServiceUnavailable,
+} = require('@/lib/escrow-service-client');
 
 /**
  * GET /api/projects/[projectId]/escrow
  *
- * Proxies to the Go escrow service GET /escrow/:id endpoint.
- * Returns the escrow state as JSON, or 404 if the escrow does not exist.
- *
- * TODO: implement
- *   1. Look up the escrow ID for this project (stored in Supabase or returned by the Go service)
- *   2. GET {ESCROW_SERVICE_URL}/escrow/{escrowId}
- *   3. Forward the response (or 404 if not found)
+ * Proxies to the Go service. The project → escrow lookup happens there, not
+ * here: escrows are that service's data.
  */
 async function GET(request, { params }) {
   try {
@@ -26,15 +25,27 @@ async function GET(request, { params }) {
       return NextResponse.json({ error: 'Invalid project ID' }, { status: 400 });
     }
 
-    await requireAuthAndPermission(Permission.MANAGE_PROJECTS, { projectId }, request);
+    // A read: the client and assigned contributors need it, so not MANAGE.
+    await requireAuthAndPermission(Permission.VIEW_PROJECTS, { projectId }, request);
 
-    // TODO: resolve escrow ID for this project then call:
-    // const res = await fetch(`${ESCROW_SERVICE_URL}/escrow/${escrowId}`);
-    // if (res.status === 404) return NextResponse.json({ error: 'Escrow not found' }, { status: 404 });
-    // return NextResponse.json(await res.json());
+    const { response, data } = await callEscrowService(`/project/${projectId}/escrow`, {
+      method: 'GET',
+      request,
+    });
 
-    return NextResponse.json({ error: 'Not implemented' }, { status: 501 });
+    if (response.status === 404) {
+      // Not an error condition — the UI renders the "create escrow" form.
+      return NextResponse.json({ error: 'Escrow not found' }, { status: 404 });
+    }
+    if (!response.ok) {
+      return escrowServiceErrorResponse(response, data);
+    }
+
+    return NextResponse.json(data);
   } catch (error) {
+    if (error instanceof EscrowServiceUnavailable) {
+      return unavailableResponse(error);
+    }
     logger.error('Error in GET /api/projects/[projectId]/escrow', {}, error);
     return handleGuardError(error);
   }
@@ -46,12 +57,6 @@ async function GET(request, { params }) {
  * Creates a new escrow for the project via the Go escrow service.
  *
  * Body: { totalMilestones: number, amountPerMilestone: number, contractorId: string }
- *
- * TODO: implement
- *   1. Parse and validate the request body
- *   2. Fetch the current user profile to use as client_id
- *   3. POST {ESCROW_SERVICE_URL}/escrow with the full payload
- *   4. Return the created escrow JSON from the Go service
  */
 async function POST(request, { params }) {
   try {
@@ -61,7 +66,10 @@ async function POST(request, { params }) {
       return NextResponse.json({ error: 'Invalid project ID' }, { status: 400 });
     }
 
-    await requireAuthAndPermission(Permission.MANAGE_PROJECTS, { projectId }, request);
+    // VIEW not MANAGE: client_id is the caller, so the caller must BE the
+    // client. MANAGE_PROJECTS would let only PMs create an escrow and record
+    // the PM as the payer. Still project-scoped, so they must be assigned.
+    await requireAuthAndPermission(Permission.VIEW_PROJECTS, { projectId }, request);
 
     const supabase = createApiSupabaseClient(request);
     if (!supabase) {
@@ -83,24 +91,52 @@ async function POST(request, { params }) {
       );
     }
 
-    // TODO: resolve clientId from the authenticated session, then call:
-    // const res = await fetch(`${ESCROW_SERVICE_URL}/escrow`, {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({
-    //     project_id: projectId,
-    //     client_id: clientId,
-    //     contractor_id: contractorId,
-    //     total_milestones: totalMilestones,
-    //     amount_per_milestone: amountPerMilestone,
-    //   }),
-    // });
-    // const data = await res.json();
-    // if (!res.ok) return NextResponse.json(data, { status: res.status });
-    // return NextResponse.json(data, { status: 201 });
+    if (!isValidUUID(contractorId)) {
+      return NextResponse.json({ error: 'contractorId must be a valid UUID' }, { status: 400 });
+    }
 
-    return NextResponse.json({ error: 'Not implemented' }, { status: 501 });
+    // Whole cents only — a float would silently round into an int64.
+    if (!Number.isInteger(totalMilestones) || totalMilestones < 1) {
+      return NextResponse.json(
+        { error: 'totalMilestones must be a positive integer' },
+        { status: 400 },
+      );
+    }
+    if (!Number.isInteger(amountPerMilestone) || amountPerMilestone < 1) {
+      return NextResponse.json(
+        { error: 'amountPerMilestone must be a positive integer number of cents' },
+        { status: 400 },
+      );
+    }
+
+    // client_id from the session, never the body — otherwise a caller could
+    // name someone else as the paying party.
+    const profile = await getUserProfileFromRequest(supabase);
+    if (!profile) {
+      return NextResponse.json({ error: 'User profile not found' }, { status: 401 });
+    }
+
+    const { response, data } = await callEscrowService('/escrow', {
+      method: 'POST',
+      request,
+      body: {
+        project_id: projectId,
+        client_id: profile.id,
+        contractor_id: contractorId,
+        total_milestones: totalMilestones,
+        amount_per_milestone: amountPerMilestone,
+      },
+    });
+
+    if (!response.ok) {
+      return escrowServiceErrorResponse(response, data);
+    }
+
+    return NextResponse.json(data, { status: 201 });
   } catch (error) {
+    if (error instanceof EscrowServiceUnavailable) {
+      return unavailableResponse(error);
+    }
     logger.error('Error in POST /api/projects/[projectId]/escrow', {}, error);
     return handleGuardError(error);
   }
